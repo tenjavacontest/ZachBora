@@ -1,23 +1,41 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-	<groupId>ZachBora</groupId>
-	<artifactId>ZachBora</artifactId>
+	<groupId>com.worldcretornica</groupId>
+	<artifactId>ZachBoraPlugin</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>ZachBora</name>
+	<name>ZachBoraPlugin</name>
 	<build>
-		<sourceDirectory>src</sourceDirectory>
+		<defaultGoal>clean package install</defaultGoal>
+		<finalName>ZachBoraPlugin</finalName>
+		<sourceDirectory>src/main/java</sourceDirectory>
 		<plugins>
 			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
 				<version>3.1</version>
 				<configuration>
-					<source />
-					<target />
+					<source>1.7</source>
+					<target>1.7</target>
+					<showDeprecation>true</showDeprecation>
+					<showWarnings>true</showWarnings>
 				</configuration>
 			</plugin>
 		</plugins>
+		<resources>
+			<resource>
+				<targetPath>.</targetPath>
+				<filtering>true</filtering>
+				<directory>src/main/resources</directory>
+				<includes>
+					<include>plugin.yml</include>
+				</includes>
+			</resource>
+		</resources>
 	</build>
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+	</properties>
 	<repositories>
 		<repository>
 			<id>bukkit-repo</id>
@@ -37,4 +55,7 @@
 			<version>1.7.2-R0.1-SNAPSHOT</version>
 		</dependency>
 	</dependencies>
+	<scm>
+        <url>https://github.com/tenjavacontest/ZachBora/tree/master/</url>
+    </scm>
 </project>

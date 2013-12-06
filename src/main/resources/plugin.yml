@@ -1,0 +1,6 @@
+name: ZachBoraPlugin
+main: com.worldcretornica.zachboraplugin.ZachBoraPlugin
+version: '0.1'
+author: ZachBora
+description: >
+             Plugin for the ten.java contest of 2013-12-07
