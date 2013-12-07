@@ -26,16 +26,15 @@ public class ZachBoraListener implements Listener {
     public void onPlayerMove(final PlayerMoveEvent event) {
         Location to = event.getTo();
         Location from = event.getFrom();
-        
+
         Player p1 = event.getPlayer();
         World w = p1.getWorld();
 
-        if(moved(to, from, p1, w))
-        {
+        if (moved(to, from, p1, w)) {
             event.setCancelled(true);
         }
     }
-    
+
     @EventHandler(ignoreCancelled = true)
     public void onPlayerDeath(final PlayerDeathEvent event) {
         Player p1 = event.getEntity();
@@ -45,7 +44,7 @@ public class ZachBoraListener implements Listener {
 
         moved(to, from, p1, w);
     }
-    
+
     @EventHandler(ignoreCancelled = true)
     public void onEntityKill(final EntityDeathEvent event) {
         Entity e0 = event.getEntity();
@@ -53,27 +52,26 @@ public class ZachBoraListener implements Listener {
         Location area1 = plugin.loc1;
         Location area2 = plugin.loc2;
         World w = l.getWorld();
-        
+
         if (ZachBoraPlugin.isInside(l, area1, area2)) {
-            for(Entity e : w.getEntities()) {
-                if(e instanceof LivingEntity && !e.isDead() && !(e instanceof Player)) {
+            for (Entity e : w.getEntities()) {
+                if (e instanceof LivingEntity && !e.isDead() && !(e instanceof Player)) {
                     Location loc = e.getLocation();
                     if (ZachBoraPlugin.isInside(loc, area1, area2)) {
                         return;
                     }
                 }
             }
-            
+
             plugin.startWave();
         }
     }
-    
-    private boolean moved(Location to, Location from, Player p1, World w)
-    {
+
+    private boolean moved(Location to, Location from, Player p1, World w) {
         boolean cancelled = false;
         Location area1 = plugin.loc1;
         Location area2 = plugin.loc2;
-        
+
         if (ZachBoraPlugin.isInside(to, area1, area2)) {
             if (!ZachBoraPlugin.isInside(from, area1, area2)) {
                 ArenaPlayerEnter apeevent = new ArenaPlayerEnter(w, area1, area2, p1);
@@ -113,16 +111,15 @@ public class ZachBoraListener implements Listener {
                 }
             }
         }
-        
+
         return cancelled;
     }
 
-    @EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
-    public void onArenaPlayerEnter(final ArenaPlayerEnter event) {
-        if (plugin.gamestarted) {
-            // event.setCancelled(true);
-        }
-    }
+    /*
+     * @EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
+     * public void onArenaPlayerEnter(final ArenaPlayerEnter event) { if
+     * (plugin.gamestarted) { event.setCancelled(true); } }
+     */
 
     @EventHandler(ignoreCancelled = true, priority = EventPriority.MONITOR)
     public void onArenaPlayerEnterMonitor(final ArenaPlayerEnter event) {
@@ -137,12 +134,11 @@ public class ZachBoraListener implements Listener {
         }
     }
 
-    @EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
-    public void onArenaPlayerLeave(final ArenaPlayerLeave event) {
-        if (plugin.gamestarted) {
-            // event.setCancelled(true);
-        }
-    }
+    /*
+     * @EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
+     * public void onArenaPlayerLeave(final ArenaPlayerLeave event) { if
+     * (plugin.gamestarted) { event.setCancelled(true); } }
+     */
 
     @EventHandler(ignoreCancelled = true, priority = EventPriority.MONITOR)
     public void onArenaPlayerLeaveMonitor(final ArenaPlayerLeave event) {

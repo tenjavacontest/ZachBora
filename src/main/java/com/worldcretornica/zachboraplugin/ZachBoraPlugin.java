@@ -35,11 +35,11 @@ public class ZachBoraPlugin extends JavaPlugin {
         gamestarted = false;
         countdownstarted = false;
         gamestarttaskid = new ArrayList<>();
-        
+
         this.getConfig().options().copyDefaults();
         saveConfig();
     }
-    
+
     @Override
     public void onDisable() {
         for (int taskid : gamestarttaskid) {
@@ -66,7 +66,7 @@ public class ZachBoraPlugin extends JavaPlugin {
     public void cancelArena() {
         gamestarted = false;
         countdownstarted = false;
-        
+
         World w = Bukkit.getWorld(worldname);
 
         for (int taskid : gamestarttaskid) {
@@ -85,7 +85,7 @@ public class ZachBoraPlugin extends JavaPlugin {
         currentWave = 0;
         startWave();
     }
-    
+
     public void startWave() {
         HashMap<EntityType, Integer> mobs = new HashMap<>();
 
@@ -98,18 +98,18 @@ public class ZachBoraPlugin extends JavaPlugin {
                 ConfigurationSection wave = waves.getConfigurationSection("" + currentWave);
 
                 int secondsBeforeStart = wave.getInt("SecondsBeforeStart");
-                    
+
                 int ctr = 1;
-                
-                while(wave.contains("Mob" + ctr)) {
+
+                while (wave.contains("Mob" + ctr)) {
                     ConfigurationSection mobsection = wave.getConfigurationSection("Mob" + ctr);
-                    
+
                     EntityType et = null;
-                    
+
                     if (mobsection.contains("Name")) {
                         et = EntityType.valueOf(mobsection.getString("Name"));
                     }
-                                                
+
                     if (et == null) {
                         getLogger().warning("EntityType " + mobsection.getString("Name") + " is not valid");
                     } else {
@@ -137,8 +137,6 @@ public class ZachBoraPlugin extends JavaPlugin {
             getLogger().warning("Waves Configuration missing, cannot continue");
         }
     }
-    
-    
 
     public int getNbPlayers() {
         int nb = 0;

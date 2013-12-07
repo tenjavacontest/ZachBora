@@ -35,7 +35,7 @@ public class ArenaStartTimer extends BukkitRunnable {
                 }
             }
         }
-        
+
         if (seconds <= 0) {
             plugin.startGame();
         }

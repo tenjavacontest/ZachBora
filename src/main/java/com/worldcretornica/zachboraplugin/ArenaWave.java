@@ -57,7 +57,7 @@ public class ArenaWave extends BukkitRunnable {
                 } while (yVal == maxY);
 
                 Entity e = w.spawnEntity(new Location(w, xVal, yVal, zVal), entry.getKey());
-                if(e instanceof Skeleton) {
+                if (e instanceof Skeleton) {
                     Skeleton skel = (Skeleton) e;
                     skel.getEquipment().setItemInHand(new ItemStack(Material.BOW));
                 }

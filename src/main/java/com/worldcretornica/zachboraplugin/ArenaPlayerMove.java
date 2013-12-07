@@ -19,7 +19,7 @@ abstract class ArenaPlayerMove extends Event implements Cancellable {
     protected Location l2;
     protected Player p;
     protected boolean cancelled;
-    
+
     public ArenaPlayerMove(World world, Location location1, Location location2, Player player) {
         w = world;
         l1 = location1;
@@ -27,46 +27,46 @@ abstract class ArenaPlayerMove extends Event implements Cancellable {
         p = player;
         cancelled = false;
     }
-    
+
     public Player getPlayer() {
         return p;
     }
-    
+
     public World getWorld() {
         return w;
     }
-    
+
     public Location getLocation1() {
         return l1;
     }
-    
+
     public Location getLocation2() {
         return l2;
     }
-    
+
     public List<Player> getArenaPlayers() {
-        
+
         List<Player> players = new ArrayList<>();
-        
-        for(Player p : Bukkit.getOnlinePlayers()) {
-            if(p.getWorld().equals(w)) {
-                
+
+        for (Player p : Bukkit.getOnlinePlayers()) {
+            if (p.getWorld().equals(w)) {
+
                 Location ploc = p.getLocation();
-                
+
                 if (ZachBoraPlugin.isInside(ploc, l1, l2)) {
                     players.add(p);
                 }
             }
         }
-        
+
         return players;
     }
-    
+
     @Override
     public HandlerList getHandlers() {
         return handlers;
     }
-    
+
     public static HandlerList getHandlerList() {
         return handlers;
     }
