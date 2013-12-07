@@ -1,8 +1,10 @@
 package com.worldcretornica.zachboraplugin;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -37,7 +39,11 @@ public class ZachBoraPlugin extends JavaPlugin {
         gamestarttaskid = new ArrayList<>();
 
         this.getConfig().options().copyDefaults();
-        saveConfig();
+        try {
+            this.getConfig().save("config.yml");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
