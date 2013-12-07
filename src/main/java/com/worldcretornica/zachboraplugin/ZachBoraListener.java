@@ -3,6 +3,7 @@ package com.worldcretornica.zachboraplugin;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
+import org.bukkit.Sound;
 import org.bukkit.World;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
@@ -63,6 +64,16 @@ public class ZachBoraListener implements Listener {
                 }
             }
 
+            for (Player p : Bukkit.getOnlinePlayers()) {
+                if (p.getWorld().equals(w)) {
+
+                    Location ploc = p.getLocation();
+
+                    if (ZachBoraPlugin.isInside(ploc, area1, area2)) {
+                        p.playSound(p.getLocation(), Sound.LEVEL_UP, 1, 1);
+                    }
+                }
+            }
             plugin.startWave();
         }
     }

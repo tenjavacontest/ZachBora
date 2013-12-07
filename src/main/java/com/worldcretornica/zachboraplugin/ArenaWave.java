@@ -4,8 +4,10 @@ import java.util.HashMap;
 import java.util.Map.Entry;
 
 import org.bukkit.Bukkit;
+import org.bukkit.Effect;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.Sound;
 import org.bukkit.World;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
@@ -14,6 +16,7 @@ import org.bukkit.entity.Skeleton;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
 
+@SuppressWarnings("unused")
 public class ArenaWave extends BukkitRunnable {
 
     private HashMap<EntityType, Integer> mobs;
@@ -79,7 +82,7 @@ public class ArenaWave extends BukkitRunnable {
                 Location ploc = p.getLocation();
 
                 if (ZachBoraPlugin.isInside(ploc, loc1, loc2)) {
-                    p.sendMessage("WAVE " + waveid + " ! " + mobnames);
+                    p.sendMessage("WAVE " + waveid + " : " + mobnames + " !");
                 }
             }
         }
