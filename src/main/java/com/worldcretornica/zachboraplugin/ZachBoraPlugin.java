@@ -6,6 +6,7 @@ import java.util.List;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
@@ -19,22 +20,33 @@ public class ZachBoraPlugin extends JavaPlugin {
     public int nbpeople = 0;
     public boolean gamestarted;
     public boolean countdownstarted;
-    
+    public int currentWave = 0;
+
     public List<Integer> gamestarttaskid;
 
     @Override
     public void onEnable() {
-        
+
         Bukkit.getPluginManager().registerEvents(new ZachBoraListener(this), this);
-        
+
         worldname = "TenJava";
-        loc1 = new Location(Bukkit.getWorld(worldname), -10, 60, -10);
+        loc1 = new Location(Bukkit.getWorld(worldname), -10, 63, -10);
         loc2 = new Location(Bukkit.getWorld(worldname), 10, 74, 10);
         gamestarted = false;
         countdownstarted = false;
         gamestarttaskid = new ArrayList<>();
+        
+        this.getConfig().options().copyDefaults();
+        saveConfig();
     }
     
+    @Override
+    public void onDisable() {
+        for (int taskid : gamestarttaskid) {
+            Bukkit.getScheduler().cancelTask(taskid);
+        }
+    }
+
     public static boolean isInside(Location entityLoc, Location loc1, Location loc2) {
         double x0 = entityLoc.getBlockX();
         int x1 = loc1.getBlockX();
@@ -50,75 +62,99 @@ public class ZachBoraPlugin extends JavaPlugin {
 
         return x0 >= Math.min(x1, x2) && y0 >= Math.min(y1, y2) && z0 >= Math.min(z1, z2) && x0 <= Math.max(x1, x2) && y0 <= Math.max(y1, y2) && z0 <= Math.max(z1, z2);
     }
-    
+
     public void cancelArena() {
-        World w = Bukkit.getWorld(worldname);
+        gamestarted = false;
+        countdownstarted = false;
         
-        for(int taskid : gamestarttaskid) {
+        World w = Bukkit.getWorld(worldname);
+
+        for (int taskid : gamestarttaskid) {
             Bukkit.getScheduler().cancelTask(taskid);
         }
-        
-        for(Entity e : w.getEntities()) {
-            if(!(e instanceof Player) && isInside(e.getLocation(), loc1, loc2)) {
+
+        for (Entity e : w.getEntities()) {
+            if (!(e instanceof Player) && isInside(e.getLocation(), loc1, loc2)) {
                 e.remove();
             }
         }
     }
-    
+
     public void startGame() {
         gamestarted = true;
-        
-        HashMap<EntityType, Integer> mobs = new HashMap<>();
-        
-        //Wave 1
-        mobs.put(EntityType.ZOMBIE, getNbPlayers() * 2);
-        gamestarttaskid.add(Bukkit.getScheduler().scheduleSyncDelayedTask(this, new ArenaWave(mobs, loc1, loc2), 0 * 20));
-        //Wave 2
-        mobs = new HashMap<>();
-        mobs.put(EntityType.ZOMBIE, getNbPlayers() * 4);
-        gamestarttaskid.add(Bukkit.getScheduler().scheduleSyncDelayedTask(this, new ArenaWave(mobs, loc1, loc2), 10 * 20));
-        //Wave 3
-        mobs = new HashMap<>();
-        mobs.put(EntityType.ZOMBIE, getNbPlayers() * 4);
-        mobs.put(EntityType.SPIDER, getNbPlayers() * 2);
-        gamestarttaskid.add(Bukkit.getScheduler().scheduleSyncDelayedTask(this, new ArenaWave(mobs, loc1, loc2), 20 * 20));
-        //Wave 4
-        mobs = new HashMap<>();
-        mobs.put(EntityType.SKELETON, getNbPlayers() * 4);
-        gamestarttaskid.add(Bukkit.getScheduler().scheduleSyncDelayedTask(this, new ArenaWave(mobs, loc1, loc2), 30 * 20));
-        //Wave 5
-        mobs = new HashMap<>();
-        mobs.put(EntityType.PIG, getNbPlayers() * 3);
-        gamestarttaskid.add(Bukkit.getScheduler().scheduleSyncDelayedTask(this, new ArenaWave(mobs, loc1, loc2), 40 * 20));
-        //Wave 6
-        mobs = new HashMap<>();
-        mobs.put(EntityType.SILVERFISH, getNbPlayers() * 5);
-        mobs.put(EntityType.ZOMBIE, getNbPlayers() * 2);
-        gamestarttaskid.add(Bukkit.getScheduler().scheduleSyncDelayedTask(this, new ArenaWave(mobs, loc1, loc2), 60 * 20));
-        //Wave 7
-        mobs = new HashMap<>();
-        mobs.put(EntityType.SKELETON, getNbPlayers() * 5);
-        mobs.put(EntityType.ZOMBIE, getNbPlayers() * 5);
-        gamestarttaskid.add(Bukkit.getScheduler().scheduleSyncDelayedTask(this, new ArenaWave(mobs, loc1, loc2), 90 * 20));
+        currentWave = 0;
+        startWave();
     }
     
+    public void startWave() {
+        HashMap<EntityType, Integer> mobs = new HashMap<>();
+
+        currentWave++;
+
+        if (getConfig().contains("Waves")) {
+            ConfigurationSection waves = getConfig().getConfigurationSection("Waves");
+
+            if (waves.contains("" + currentWave)) {
+                ConfigurationSection wave = waves.getConfigurationSection("" + currentWave);
+
+                int secondsBeforeStart = wave.getInt("SecondsBeforeStart");
+                    
+                int ctr = 1;
+                
+                while(wave.contains("Mob" + ctr)) {
+                    ConfigurationSection mobsection = wave.getConfigurationSection("Mob" + ctr);
+                    
+                    EntityType et = null;
+                    
+                    if (mobsection.contains("Name")) {
+                        et = EntityType.valueOf(mobsection.getString("Name"));
+                    }
+                                                
+                    if (et == null) {
+                        getLogger().warning("EntityType " + mobsection.getString("Name") + " is not valid");
+                    } else {
+
+                        int count = 0;
+
+                        if (mobsection.contains("PerPlayer")) {
+                            count += mobsection.getInt("PerPlayer") * getNbPlayers();
+                        }
+
+                        if (mobsection.contains("Additional")) {
+                            count += mobsection.getInt("Additional");
+                        }
+
+                        mobs.put(et, count);
+                    }
+                    ctr++;
+                }
+
+                gamestarttaskid.add(Bukkit.getScheduler().scheduleSyncDelayedTask(this, new ArenaWave(mobs, loc1, loc2, currentWave), secondsBeforeStart * 20));
+            } else {
+                // game is finished
+            }
+        } else {
+            getLogger().warning("Waves Configuration missing, cannot continue");
+        }
+    }
+    
+    
+
     public int getNbPlayers() {
         int nb = 0;
-        
-        for(Player p : Bukkit.getOnlinePlayers()) {
-                        
-            if(p.getWorld().equals(loc1.getWorld())) {
-                
+
+        for (Player p : Bukkit.getOnlinePlayers()) {
+
+            if (p.getWorld().equals(loc1.getWorld())) {
+
                 Location ploc = p.getLocation();
-                
-                getLogger().info("player " + p.getName());
-                
+
                 if (ZachBoraPlugin.isInside(ploc, loc1, loc2)) {
                     nb++;
                 }
             }
         }
-        
+
         return nb;
     }
 }

@@ -1,0 +1,84 @@
+Waves:
+    '1':
+        SecondsBeforeStart: 0
+        Mob1:
+            Name: 'ZOMBIE'
+            PerPlayer: 1
+            Additional: 1
+            Max: 5
+    '2':
+        SecondsBeforeStart: 2
+        Mob1:
+            Name: 'ZOMBIE'
+            PerPlayer: 2
+            Additional: 1
+            Max: 10
+    '3':
+        SecondsBeforeStart: 2
+        Mob1:
+            Name: 'ZOMBIE'
+            PerPlayer: 2
+            Additional: 1
+            Max: 5
+        Mob2:
+            Name: 'SPIDER'
+            PerPlayer: 1
+            Additional: 1
+            Max: 5
+    '4':
+        SecondsBeforeStart: 2
+        Mob1:
+            Name: 'SKELETON'
+            PerPlayer: 2
+            Additional: 1
+            Max: 10
+    '5':
+        SecondsBeforeStart: 2
+        Mob1:
+            Name: 'PIG'
+            PerPlayer: 1
+            Additional: 1
+            Max: 5
+    '6':
+        SecondsBeforeStart: 4
+        Mob1:
+            Name: 'SILVERFISH'
+            PerPlayer: 2
+            Additional: 1
+            Max: 8
+        Mob2:
+            Name: 'ZOMBIE'
+            PerPlayer: 2
+            Additional: 0
+            Max: 8
+    '7':
+        SecondsBeforeStart: 2
+        Mob1:
+            Name: 'ZOMBIE'
+            PerPlayer: 2
+            Additional: 1
+            Max: 10
+        Mob2:
+            Name: 'SKELETON'
+            PerPlayer: 2
+            Additional: 1
+            Max: 10
+    '8':
+        SecondsBeforeStart: 2
+        Mob1:
+            Name: 'WOLF'
+            PerPlayer: 3
+            Additional: 0
+            Max: 15
+    '9':
+        SecondsBeforeStart: 2
+        Mob1:
+            Name: 'SKELETON'
+            PerPlayer: 3
+            Additional: 0
+            Max: 20
+        Mob2:
+            Name: 'SLIME'
+            PerPlayer: 2
+            Additional: 1
+            Max: 20
